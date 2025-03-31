@@ -1,0 +1,1228 @@
+-- Crearea tabelelor
+CREATE TABLE Student (
+    id_student INT PRIMARY KEY,
+    nume VARCHAR2(50) NOT NULL,
+    prenume VARCHAR2(50) NOT NULL,
+    initiala_tata VARCHAR2(5) NOT NULL,
+    data_nasterii DATE,
+    tara VARCHAR2(50) NOT NULL,
+    judet VARCHAR2(50),
+    localitate VARCHAR2(50),
+    gen CHAR(1),
+    cnp VARCHAR2(50) NOT NULL,
+    mediu_provenienta VARCHAR2(50) NOT NULL,
+    email VARCHAR2(100) NOT NULL,
+    nr_telefon VARCHAR2(10) NOT NULL,
+    id_camin INT,
+    FOREIGN KEY (id_camin) REFERENCES Camin (id_camin)
+);
+
+CREATE TABLE Profesor (
+    id_prof INT PRIMARY KEY,
+    nume VARCHAR2(50) NOT NULL,
+    prenume VARCHAR2(50) NOT NULL,
+    tip_prof VARCHAR2(50) NOT NULL,
+    cnp VARCHAR2(50) NOT NULL,
+    email VARCHAR2(50) NOT NULL,
+    nr_telefon VARCHAR2(10) NOT NULL,
+    salariu INT NOT NULL
+);
+
+CREATE TABLE Materie (
+    id_mat INT PRIMARY KEY,
+    denumire_mat VARCHAR2(50) NOT NULL,
+    nr_credite INT,
+    id_prof INT NOT NULL,
+    FOREIGN KEY (id_prof) REFERENCES Profesor (id_prof)
+);
+
+CREATE TABLE Specializare (
+    id_specializare INT PRIMARY KEY,
+    denumire VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE Serie (
+    id_serie INT PRIMARY KEY,
+    nr_serie INT,
+    id_specializare INT NOT NULL,
+    FOREIGN KEY (id_specializare) REFERENCES Specializare (id_specializare)
+);
+
+CREATE TABLE Grupa (
+    id_grupa INT PRIMARY KEY,
+    nr_grupa INT,
+    id_serie INT NOT NULL,
+    FOREIGN KEY (id_serie) REFERENCES Serie (id_serie)
+);
+
+CREATE TABLE Curs (
+    id_curs INT PRIMARY KEY,
+    zi_curs VARCHAR2(10),
+    amfiteatru VARCHAR2(50),
+    id_serie INT NOT NULL,
+    id_prof INT,
+    FOREIGN KEY (id_serie) REFERENCES Serie (id_serie),
+    FOREIGN KEY (id_prof) REFERENCES Profesor (id_prof)
+);
+
+CREATE TABLE Laborator (
+    id_lab INT PRIMARY KEY,
+    tip_saptamana_lab VARCHAR2(10),
+    zi_lab VARCHAR2(10),
+    sala_lab VARCHAR2(20),
+    id_grupa INT NOT NULL,
+    id_prof INT,
+    FOREIGN KEY (id_grupa) REFERENCES Grupa (id_grupa),
+    FOREIGN KEY (id_prof) REFERENCES Profesor (id_prof)
+);
+
+CREATE TABLE Seminar (
+    id_sem INT PRIMARY KEY,
+    tip_saptamana_sem VARCHAR2(10),
+    zi_sem VARCHAR2(10),
+    sala_sem VARCHAR2(20),
+    id_grupa INT NOT NULL,
+    id_prof INT,
+    FOREIGN KEY (id_grupa) REFERENCES Grupa (id_grupa),
+    FOREIGN KEY (id_prof) REFERENCES Profesor (id_prof)
+);
+
+CREATE TABLE Finantare (
+    id_fin INT PRIMARY KEY,
+    tip_fin VARCHAR2(50)
+);
+
+CREATE TABLE Student_Specializare (
+    id_student INT,
+    id_specializare INT,
+    PRIMARY KEY (id_student, id_specializare),
+    FOREIGN KEY (id_student) REFERENCES Student (id_student),
+    FOREIGN KEY (id_specializare) REFERENCES Specializare (id_specializare)
+);
+
+CREATE TABLE Student_Finantare (
+    id_student INT,
+    id_fin INT,
+    PRIMARY KEY (id_student, id_fin),
+    FOREIGN KEY (id_student) REFERENCES Student (id_student),
+    FOREIGN KEY (id_fin) REFERENCES Finantare (id_fin)
+);
+
+CREATE TABLE Camin (
+    id_camin INT PRIMARY KEY,
+    denumire_camin VARCHAR2(50)
+);
+
+CREATE TABLE Nota (
+    id_nota INT PRIMARY KEY,
+    nota INT,
+    id_student INT,
+    id_mat INT,
+    FOREIGN KEY (id_student) REFERENCES Student (id_student),
+    FOREIGN KEY (id_mat) REFERENCES Materie (id_mat)
+);
+
+-- Secventele
+-- secventa id_student
+CREATE SEQUENCE seq_student_id
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1
+MAXVALUE 999
+NOCYCLE;
+
+-- secventa id_prof
+CREATE SEQUENCE seq_prof_id
+START WITH 1000
+INCREMENT BY 1
+MINVALUE 1000
+MAXVALUE 1999
+NOCYCLE;
+
+-- secventa id_mat
+CREATE SEQUENCE seq_mat_id
+START WITH 2000
+INCREMENT BY 1
+MINVALUE 2000
+MAXVALUE 2999
+NOCYCLE;
+
+-- secventa id_specializare
+CREATE SEQUENCE seq_spec_id
+START WITH 3000
+INCREMENT BY 1
+MINVALUE 3000
+MAXVALUE 3199
+NOCYCLE;
+
+-- secventa id_fin
+CREATE SEQUENCE seq_fin_id
+START WITH 3200
+INCREMENT BY 1
+MINVALUE 3200
+MAXVALUE 3299
+NOCYCLE;
+
+-- id_serie
+CREATE SEQUENCE seq_serie_id
+START WITH 3300
+INCREMENT BY 1
+MINVALUE 3300
+MAXVALUE 3399
+NOCYCLE;
+
+-- secventa id_grupa
+CREATE SEQUENCE seq_grupa_id
+START WITH 3400
+INCREMENT BY 1
+MINVALUE 3400
+MAXVALUE 3499
+NOCYCLE;
+
+-- secventa id_camin
+CREATE SEQUENCE seq_camin_id
+START WITH 3500
+INCREMENT BY 1
+MINVALUE 3500
+MAXVALUE 3999
+NOCYCLE;
+
+-- secventa id_nota
+CREATE SEQUENCE seq_nota_id
+START WITH 4000
+INCREMENT BY 1
+MINVALUE 4000
+MAXVALUE 4999
+NOCYCLE;
+
+-- secventa id_curs
+CREATE SEQUENCE seq_curs_id
+START WITH 5000
+INCREMENT BY 1
+MINVALUE 5000
+MAXVALUE 5999
+NOCYCLE;
+
+-- secventa id_lab
+CREATE SEQUENCE seq_lab_id
+START WITH 6000
+INCREMENT BY 1
+MINVALUE 6000
+MAXVALUE 6999
+NOCYCLE;
+
+-- secventa id_sem
+CREATE SEQUENCE seq_sem_id
+START WITH 7000
+INCREMENT BY 1
+MINVALUE 7000
+MAXVALUE 7999
+NOCYCLE;
+
+-- Inserarea datelor
+-- Pentru CAMIN
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Grozavesti');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Kogalniceanu');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Fundeni');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Magurele');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Poligrafie');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Palady');
+
+INSERT INTO Camin (id_camin, denumire_camin)
+VALUES (seq_camin_id.NEXTVAL, 'Stoian Militaru');
+
+SELECT * FROM Camin;
+
+-- Pentru STUDENT
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL , 'Popescu', 'Ion', 'C', TO_DATE('2003-05-10', 'YYYY-MM-DD'), 'Romania', 'Bucuresti', 'Bucuresti', 'M', '1980510123456', 'Urban', 'popescu.ion@email.com', '0723456789');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Ionescu', 'Maria', 'B', TO_DATE('1999-03-15', 'YYYY-MM-DD'), 'Romania', 'Cluj', 'Cluj-Napoca', 'F', '1990315123456', 'Urban', 'ionescu.maria@email.com', '0734567890', 3500);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Popa', 'Alexandru', 'S', TO_DATE('2001-01-20', 'YYYY-MM-DD'), 'Romania', 'Brasov', 'Brasov', 'M', '2000120123456', 'Rural', 'popa.alex@email.com', '0745678901', 3500);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Mihai', 'Ana', 'R.A', TO_DATE('2004-09-05', 'YYYY-MM-DD'), 'Romania', 'Timis', 'Timisoara', 'F', '1990905123456', 'Urban', 'mihai.ana@email.com', '0766666666', 3505);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Georgescu', 'Mihai', 'A', TO_DATE('2003-07-25', 'YYYY-MM-DD'), 'Romania', 'Iasi', 'Iasi', 'M', '1990725123456', 'Rural', 'georgescu.mihai@email.com', '0756789012', 3502);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Popovici', 'Elena', 'M.V', TO_DATE('2002-06-18', 'YYYY-MM-DD'), 'Romania', 'Constanta', 'Constanta', 'F', '2000618123456', 'Urban', 'popovici.elena@email.com', '0767890123');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Radu', 'Andreea', 'D', TO_DATE('2002-12-02', 'YYYY-MM-DD'), 'Romania', 'Bucuresti', 'Bucuresti', 'F', '2001202123456', 'Urban', 'radu.andreea@email.com', '0712345678');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Pop', 'Mihai', 'R', TO_DATE('2001-07-15', 'YYYY-MM-DD'), 'Romania', 'Cluj', 'Cluj-Napoca', 'M', '2000715123456', 'Urban', 'pop.mihai@email.com', '0723456789', 3501);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Dumitrescu', 'Ana', 'L', TO_DATE('2003-02-08', 'YYYY-MM-DD'), 'Romania', 'Bucuresti', 'Bucuresti', 'F', '2000208123456', 'Urban', 'dumitrescu.ana@email.com', '0734567890');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Gheorghe', 'George', 'V', TO_DATE('2000-09-21', 'YYYY-MM-DD'), 'Romania', 'Timis', 'Timisoara', 'M', '2000921123456', 'Urban', 'gheorghe.george@email.com', '0745678901', 3501);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Munteanu', 'Elena', 'D.I', TO_DATE('2001-06-10', 'YYYY-MM-DD'), 'Romania', 'Iasi', 'Iasi', 'F', '2000610123456', 'Rural', 'munteanu.elena@email.com', '0756789012', 3500);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Diaconu', 'Alexandru', 'M', TO_DATE('2003-04-25', 'YYYY-MM-DD'), 'Romania', 'Brasov', 'Brasov', 'M', '2000425123456', 'Urban', 'diaconu.alexandru@email.com', '0767890123', 3504);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Stancu', 'Mihaela', 'A.I', TO_DATE('2002-01-18', 'YYYY-MM-DD'), 'Romania', 'Constanta', 'Constanta', 'F', '2000118123456', 'Urban', 'stancu.mihaela@email.com', '0778901234', 3504);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Iacob', 'Gabriel', 'T', TO_DATE('2000-03-12', 'YYYY-MM-DD'), 'Romania', 'Bucuresti', 'Bucuresti', 'M', '2000312123456', 'Urban', 'iacob.gabriel@email.com', '0789012345');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Voinea', 'Maria', 'G.C', TO_DATE('2001-08-27', 'YYYY-MM-DD'), 'Romania', 'Cluj', 'Cluj-Napoca', 'F', '2000827123456', 'Rural', 'voinea.maria@email.com', '0790123456');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Florescu', 'Andrei', 'L.A', TO_DATE('2002-05-14', 'YYYY-MM-DD'), 'Romania', 'Timis', 'Timisoara', 'M', '2000514123456', 'Urban', 'florescu.andrei@email.com', '0712345678', 3503);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Smith', 'John', 'A', TO_DATE('2000-02-15', 'YYYY-MM-DD'), 'Statele Unite ale Americii', 'California', 'Los Angeles', 'M', '2000215123456', 'Urban', 'john.smith@email.com', '0712345678', 3500);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Garcia', 'Maria', 'L', TO_DATE('2001-07-20', 'YYYY-MM-DD'), 'Spania', 'Barcelona', 'Barcelona', 'F', '2000720123456', 'Urban', 'maria.garcia@email.com', '0723456789', 3506);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Muller', 'Hans', 'R', TO_DATE('2002-03-10', 'YYYY-MM-DD'), 'Germania', 'Bavaria', 'Munich', 'M', '2000310123456', 'Urban', 'hans.muller@email.com', '0734567890', 3506);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Lopez', 'Ana', 'G', TO_DATE('2003-06-25', 'YYYY-MM-DD'), 'Spania', 'Madrid', 'Madrid', 'F', '2000625123456', 'Urban', 'ana.lopez@email.com', '0745678901');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Chen', 'Wei', 'Y', TO_DATE('2002-09-05', 'YYYY-MM-DD'), 'China', 'Shanghai', 'Shanghai', 'M', '2000905123456', 'Urban', 'wei.chen@email.com', '0756789012', 3501);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Rahman', 'Ali', 'M', TO_DATE('2001-11-18', 'YYYY-MM-DD'), 'Bangladesh', 'Dhaka', 'Dhaka', 'M', '2001118123456', 'Urban', 'ali.rahman@email.com', '0767890123', 3502);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Kim', 'Min-Ji', 'S', TO_DATE('2000-04-14', 'YYYY-MM-DD'), 'Korea de Sud', 'Seoul', 'Seoul', 'F', '2000414123456', 'Urban', 'minji.kim@email.com', '0778901234');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Dubois', 'Pierre', 'M', TO_DATE('2001-08-27', 'YYYY-MM-DD'), 'Franta', 'Paris', 'Paris', 'M', '2000827123456', 'Rural', 'pierre.dubois@email.com', '0789012345', 3502);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'González', 'Sofía', 'R', TO_DATE('2000-03-12', 'YYYY-MM-DD'), 'Spania', 'Valencia', 'Valencia', 'F', '2000312123456', 'Urban', 'sofia.gonzalez@email.com', '0790123456');
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Silva', 'Isabella', 'M', TO_DATE('2002-05-14', 'YYYY-MM-DD'), 'Brazilia', 'Sao Paulo', 'Sao Paulo', 'F', '2000514123456', 'Urban', 'isabella.silva@email.com', '0723456789', 3500);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Negure', 'Silvia', 'M.V', TO_DATE('1997-03-10', 'YYYY-MM-DD'), 'Romania', 'Bacau', 'Moinesti', 'F', '2000168323456', 'Urban', 'negure.silvia@email.com', '0767861423', 3506);
+
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon)
+VALUES (seq_student_id.NEXTVAL, 'Potcoava', 'Valentin', 'C', TO_DATE('1998-08-19', 'YYYY-MM-DD'), 'Romania', 'Iasi', 'Iasi', 'M', '7496618123456', 'Rural', 'potcoava.valentin@email.com', '0767899658');
+
+SELECT * FROM Student;
+
+-- Pentru PROFESOR
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Cotroceanu', 'Marian', 'Lector', '1950615123456', 'cotroceanu.marian@email.com', '0723456789', 5000);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Stacescu', 'Andreea', 'Laborant', '2980220154321', 'stacescu.andreea@email.com', '0734567890', 3000);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popa', 'Valerica', 'Lector', '3971103145678', 'valerica.popa@email.com', '0745678901', 4500);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Mistru', 'Radu', 'Seminarist', '4960910134567', 'mistru.radu@email.com', '0756789012', 3000);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Georgescu', 'Alexandru', 'Laborant', '5990425189012', 'alexandru.georgescu@email.com', '0767890123', 5000);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popescu', 'Ion', 'Lector', '1970615234567', 'ion.popescu@email.com', '0734567890', 5500);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Ionescu', 'Ana', 'Laborant', '1980615345678', 'ana.ionescu@email.com', '0745678901', 4500);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popa', 'Maria', 'Lector', '1990615456789', 'maria.popa@email.com', '0756789012', 5200);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Georgescu', 'Mihai', 'Seminarist', '2000615567890', 'mihai.georgescu@email.com', '0767890123', 4800);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Constantin', 'Andreea', 'Lector', '2010615678901', 'andreea.constantin@email.com', '0778901234', 5300);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popovici', 'Adrian', 'Laborant', '2020615789012', 'adrian.popovici@email.com', '0789012345', 4200);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Munteanu', 'Elena', 'Lector', '2030615890123', 'elena.munteanu@email.com', '0790123456', 5100);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Dumitrescu', 'Alexandru', 'Seminarist', '2040615901234', 'alexandru.dumitrescu@email.com', '0801234567', 4700);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Stancu', 'Laura', 'Lector', '2050615012345', 'laura.stancu@email.com', '0812345678', 5400);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Radulescu', 'Cristian', 'Laborant', '2060615123456', 'cristian.radulescu@email.com', '0823456789', 4300);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Barsan', 'Gabriela', 'Lector', '2070615234567', 'gabriela.birsan@email.com', '0834567890', 4900);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Mihalache', 'Daniel', 'Lector', '2080615345678', 'daniel.mihalache@email.com', '0845678901', 4600);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Radu', 'Alexandra', 'Lector', '2090615456789', 'alexandra.radu@email.com', '0856789012', 5300);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Marinescu', 'Marius', 'Lector', '2100615567890', 'marius.marinescu@email.com', '0867890123', 4800);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Dumitrache', 'Andreea', 'Lector', '2110615678901', 'andreea.dumitrache@email.com', '0878901234', 5200);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popov', 'Vladimir', 'Laborant', '2120615789012', 'vladimir.popov@email.com', '0889012345', 4500);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Avram', 'Gabriel', 'Lector', '2130615890123', 'gabriel.avram@email.com', '0890123456', 5100);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Stoica', 'Ioana', 'Seminarist', '2140615901234', 'ioana.stoica@email.com', '0901234567', 4700);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Gheorghe', 'Razvan', 'Lector', '2150615012345', 'razvan.gheorghe@email.com', '0912345678', 5400);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Dobre', 'Anca', 'Laborant', '2160615123456', 'anca.dobre@email.com', '0923456789', 4200);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Malaita', 'Crina', 'Laborant', '2180825123456', 'crina.malaita@email.com', '0856789012', 3600);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Garcea', 'Mirela', 'Laborant', '2171119123456', 'mirela.garcea@email.com', '0867890123', 3500);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Penciu', 'Iulian', 'Seminarist', '2160615123456', 'iulian.penciu@email.com', '0923456789', 4000);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Sincu', 'Daniela', 'Seminarist', '2190405123456', 'daniela.sincu@email.com', '0934567890', 4100);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Iancu', 'Laurentiu', 'Seminarist', '2171119123456', 'laurentiu.iancu@email.com', '0967890123', 4400);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Popovici', 'George', 'Seminarist', '2160615193456', 'george.popovici@email.com', '0923456752', 4100);
+
+INSERT INTO Profesor (id_prof, nume, prenume, tip_prof, cnp, email, nr_telefon, salariu)
+VALUES (seq_prof_id.NEXTVAL, 'Cornaceanu', 'Valerica', 'Laborant', '2789615567890', 'valerica.cornaceanu@email.com', '0767894586', 5000);
+
+SELECT * FROM Profesor;
+
+-- Pentru MATERIE
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Arhitectura sistemelor de calcul', 4, 1000);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Arhitectura sistemelor de calcul', 4, 1001);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Geometrie si algebra liniara', 4, 1002);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Arhitectura sistemelor de calcul', 4, 1003);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Structuri algebrice in informatica', 4, 1005);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Calcul diferential si integral', 6, 1007);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Probabilitati si statistica', 5, 1004);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Programare functonala', 5, 1006);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Inteligenta artificiala', 5, 1009);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Calculabilitate si complexitate', 5, 1008);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Securitatea sistemelor informatice', 5, 1011);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Inginerie software', 5, 1015);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Analiza matematica 1', 6, 1016);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Elemente de calcul stiintific', 5, 1017);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Teoria masurii si a integrarii', 5, 1018);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Probabilitati', 5, 1019);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Gandire critica si etica academica in informatica', 4, 1020);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Baze de date', 6, 1021);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Limbaje formale si automate', 4, 1022);
+
+INSERT INTO Materie (id_mat, denumire_mat, nr_credite, id_prof)
+VALUES (seq_mat_id.NEXTVAL, 'Structuri algebrice in informatica', 4, 1023);
+
+SELECT * FROM Materie;
+
+-- Pentru SPECIALIZARE
+INSERT INTO Specializare (id_specializare, denumire)
+VALUES (seq_spec_id.NEXTVAL, 'Informatica');
+
+INSERT INTO Specializare (id_specializare, denumire)
+VALUES (seq_spec_id.NEXTVAL, 'Matematica');
+
+INSERT INTO Specializare (id_specializare, denumire)
+VALUES (seq_spec_id.NEXTVAL, 'CTI');
+
+INSERT INTO Specializare (id_specializare, denumire)
+VALUES (seq_spec_id.NEXTVAL, 'Matematica aplicata');
+
+INSERT INTO Specializare (id_specializare, denumire)
+VALUES (seq_spec_id.NEXTVAL, 'Matematica informatica');
+
+SELECT * FROM Specializare;
+
+-- Pentru FINANTARE
+INSERT INTO Finantare (id_fin, tip_fin)
+VALUES (seq_fin_id.NEXTVAL, 'Buget');
+
+INSERT INTO Finantare (id_fin, tip_fin)
+VALUES (seq_fin_id.NEXTVAL, 'Taxa');
+
+INSERT INTO Finantare (id_fin, tip_fin)
+VALUES (seq_fin_id.NEXTVAL, 'Student international');
+
+INSERT INTO Finantare (id_fin, tip_fin)
+VALUES (seq_fin_id.NEXTVAL, 'Bursa sociala');
+
+INSERT INTO Finantare (id_fin, tip_fin)
+VALUES (seq_fin_id.NEXTVAL, 'Bursa de merit');
+
+SELECT * FROM Finantare;
+
+-- Pentru SERIE
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 14, 3000);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 13, 3000);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 15, 3000);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 16, 3002);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 10, 3001);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 11, 3001);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 12, 3001);
+
+INSERT INTO Serie (id_serie, nr_serie, id_specializare)
+VALUES (seq_serie_id.NEXTVAL, 22, 3003);
+
+SELECT * FROM Serie;
+
+-- Pentru GRUPA
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 131, 3301);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 132, 3301);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 133, 3301);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 134, 3301);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 141, 3300);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 142, 3300);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 143, 3300);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 144, 3300);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 151, 3302);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 152, 3302);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 161, 3303);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 162, 3303);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 101, 3304);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 102, 3304);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 103, 3304);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 111, 3305);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 112, 3305);
+
+INSERT INTO Grupa (id_grupa, nr_grupa, id_serie)
+VALUES (seq_grupa_id.NEXTVAL, 113, 3305);
+
+SELECT * FROM Grupa;
+
+-- Pentru CURS
+INSERT INTO Curs (id_curs, zi_curs, amfiteatru, id_serie, id_prof)
+VALUES (seq_curs_id.NEXTVAL, 'Luni', 'Haret', 3301, 1000);
+
+INSERT INTO Curs (id_curs, zi_curs, amfiteatru, id_serie, id_prof)
+VALUES (seq_curs_id.NEXTVAL, 'Miercuri', 'Pompeiu', 3304, 1002);
+
+INSERT INTO Curs (id_curs, zi_curs, amfiteatru, id_serie, id_prof)
+VALUES (seq_curs_id.NEXTVAL, 'Joi', 'Stoilow', 3304, 1016);
+
+INSERT INTO Curs (id_curs, zi_curs, amfiteatru, id_serie, id_prof)
+VALUES (seq_curs_id.NEXTVAL, 'Luni', 'Stoilow', 3302, 1023);
+
+INSERT INTO Curs (id_curs, zi_curs, amfiteatru, id_serie, id_prof)
+VALUES (seq_curs_id.NEXTVAL, 'Miercuri', 'Titeica', 3300, 1021);
+
+SELECT * FROM Curs;
+
+-- Pentru LABORATOR
+INSERT INTO Laborator (id_lab, tip_saptamana_lab, zi_lab, sala_lab, id_grupa, id_prof)
+VALUES (seq_lab_id.NEXTVAL, 'Par', 'Luni', 'LAB1', 3400, 1001);
+
+INSERT INTO Laborator (id_lab, tip_saptamana_lab, zi_lab, sala_lab, id_grupa, id_prof)
+VALUES (seq_lab_id.NEXTVAL, 'Impar', 'Miercuri', 'LAB2', 3403, 1020);
+
+INSERT INTO Laborator (id_lab, tip_saptamana_lab, zi_lab, sala_lab, id_grupa, id_prof)
+VALUES (seq_lab_id.NEXTVAL, 'Par', 'Joi', 'LAB3', 3401, 1001);
+
+INSERT INTO Laborator (id_lab, tip_saptamana_lab, zi_lab, sala_lab, id_grupa, id_prof)
+VALUES (seq_lab_id.NEXTVAL, 'Impar', 'Vineri', 'LAB4', 3406, 1006);
+
+INSERT INTO Laborator (id_lab, tip_saptamana_lab, zi_lab, sala_lab, id_grupa, id_prof)
+VALUES (seq_lab_id.NEXTVAL, 'Par', 'Vineri', 'LAB2', 3402, 1020);
+
+SELECT * FROM Laborator;
+
+-- Pentru SEMINAR
+INSERT INTO Seminar (id_sem, tip_saptamana_sem, zi_sem, sala_sem, id_grupa, id_prof)
+VALUES (seq_sem_id.NEXTVAL, 'Par', 'Luni', 'SALA1', 3409, 1008);
+
+INSERT INTO Seminar (id_sem, tip_saptamana_sem, zi_sem, sala_sem, id_grupa, id_prof)
+VALUES (seq_sem_id.NEXTVAL, 'Impar', 'Miercuri', 'SALA2', 3405, 1022);
+
+INSERT INTO Seminar (id_sem, tip_saptamana_sem, zi_sem, sala_sem, id_grupa, id_prof)
+VALUES (seq_sem_id.NEXTVAL, 'Par', 'Joi', 'SALA3', 3400, 1003);
+
+INSERT INTO Seminar (id_sem, tip_saptamana_sem, zi_sem, sala_sem, id_grupa, id_prof)
+VALUES (seq_sem_id.NEXTVAL, 'Impar', 'Vineri', 'SALA4', 3404, 1008);
+
+INSERT INTO Seminar (id_sem, tip_saptamana_sem, zi_sem, sala_sem, id_grupa, id_prof)
+VALUES (seq_sem_id.NEXTVAL, 'Par', 'Marti', 'SALA1', 3409, 1022);
+
+SELECT * FROM Seminar;
+
+-- Pentru STUDENT_SPECIALIZARE
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (1, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (2, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (1, 3002);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (3, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (4, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (5, 3001);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (6, 3001);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (7,3002);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (8, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (9, 3003);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (10, 3004);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (11, 3000);
+
+INSERT INTO Student_Specializare (id_student, id_specializare)
+VALUES (10, 3000);
+
+SELECT * FROM Student_Specializare;
+
+-- Pentru STUDENT_FINANTARE
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (1, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (10, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (2, 3201);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (3, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (4, 3201);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (1, 3203);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (16, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (17, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (18, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (19, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (20, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (21, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (22, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (23, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (24, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (25, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (26, 3202);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (16, 3204);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (17, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (18, 3204);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (19, 3201);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (20, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (21, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (22, 3204);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (23, 3204);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (24, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (25, 3201);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (26, 3201);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (4, 3200);
+
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (4, 3203);
+
+SELECT * FROM Student_Finantare;
+
+-- Pentru NOTA
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 8, 1, 2002);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 9, 3, 2004);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 7, 1, 2004);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 10, 7, 2002);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 6, 9, 2012);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 5, 1, 2017);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 10, 9, 2015);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 8, 7, 2017);
+
+-- nou pt ex8
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 2, 6, 2002);
+
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 2, 9, 2012);
+---
+SELECT * FROM Nota;
+
+
+SET SERVEROUTPUT ON;
+
+-- 6
+CREATE OR REPLACE PROCEDURE afiseaza_camin_rural IS
+    -- definim un tablou indexat pt id_camin
+    TYPE t_id_camin IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+    l_id_camin t_id_camin;
+    
+    -- definim un vector pt denumirile caminelor
+    TYPE t_camin IS VARRAY(100) OF VARCHAR2(100);
+    l_camin t_camin := t_camin();
+    
+    -- definim un tablou imbricat pt nume studenti
+    TYPE t_student IS TABLE OF VARCHAR2(200);
+    l_student t_student;
+    
+BEGIN
+    -- salvam id urile de camin in tabloul indexat
+    SELECT id_camin
+    BULK COLLECT INTO l_id_camin
+    FROM camin;
+    
+    -- salvam nume camine in vector
+    SELECT denumire_camin
+    BULK COLLECT INTO l_camin
+    FROM camin;
+    
+    -- pt fiecare camin cautam studentii din rural
+    FOR i IN 1 .. l_id_camin.COUNT LOOP
+        SELECT s.nume || ' ' || s.prenume
+        BULK COLLECT INTO l_student
+        FROM student s
+        WHERE s.id_camin = l_id_camin(i)
+        AND LOWER(s.mediu_provenienta) = 'rural';
+        
+        -- afisam nume camin
+        DBMS_OUTPUT.PUT_LINE(l_camin(i));
+        
+        -- verificam sa fie studenti si ii afisam
+        IF l_student.COUNT > 0 THEN
+            FOR j IN 1 .. l_student.COUNT LOOP
+                DBMS_OUTPUT.PUT_LINE('- ' || l_student(j));
+            END LOOP;
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Nu exista');
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('');
+    END LOOP;
+END;
+/
+
+-- apelam procedura
+BEGIN
+    afiseaza_camin_rural;
+END;
+/
+
+SELECT s.nume, s.prenume, c.denumire_camin, mediu_provenienta
+FROM student s, camin c
+WHERE s.id_camin = c.id_camin
+ORDER BY 3, 4;
+
+
+-- 7
+CREATE OR REPLACE PROCEDURE afiseaza_studenti_camin IS
+    -- definim un cursor explicit pt a obtine caminele
+    CURSOR c_camin IS
+        SELECT id_camin, denumire_camin
+        FROM camin;
+  
+    -- definim un cursor parametrizat pt a selecta studentii in functie de id camin
+    CURSOR c_student (p_id_camin camin.id_camin%TYPE) IS
+        SELECT nume || ' ' || prenume AS nume_complet
+        FROM student
+        WHERE id_camin = p_id_camin;
+
+BEGIN
+    -- obtinem fiecare camin
+    FOR camin_rec IN c_camin LOOP
+        DBMS_OUTPUT.PUT_LINE(camin_rec.denumire_camin);
+    
+        -- obtinem studentii din caminului curent
+        FOR student_rec IN c_student(camin_rec.id_camin) LOOP
+        DBMS_OUTPUT.PUT_LINE('- ' || student_rec.nume_complet);
+        END LOOP;
+        DBMS_OUTPUT.PUT_LINE('');
+    END LOOP;
+
+END;
+/
+
+-- apelare
+BEGIN
+  afiseaza_studenti_camin;
+END;
+/
+
+SELECT c.denumire_camin, s.nume || ' ' || s.prenume nume
+FROM student s, camin c
+WHERE s.id_camin = c.id_camin
+ORDER BY denumire_camin;
+
+-- 8
+CREATE OR REPLACE FUNCTION obtine_prof_nr_max_2 RETURN VARCHAR2 IS
+    prof_max VARCHAR2(50); -- variabila pt numele profului care a dat cele mai multe note de 2
+    nr_max INTEGER := 0; -- variabila pt nr max de note de 2
+    nr_profi INTEGER := 0; -- variabila pt nr de profi care au dat nr max de note de 2
+BEGIN
+    -- gasim nr max de note de 2 date de profi
+    -- group by face ca fiecare prof sa fie considerat un grupulet separat
+    -- deci obtinem nr total de 2 uri pt fiecare prof
+    SELECT MAX(nr_note)
+    INTO nr_max
+    FROM (
+        SELECT COUNT(*) nr_note
+        FROM profesor p, materie m, nota n
+        WHERE p.id_prof = m.id_prof
+        AND m.id_mat = n.id_mat
+        AND n.nota = 2
+        GROUP BY p.nume, p.prenume
+    );
+    
+    -- verificam daca nu exista note de 2
+    IF nr_max IS NULL THEN
+        RAISE NO_DATA_FOUND;
+    END IF;
+    
+    -- selectam profii care au dat acest nr max de note de 2
+    -- group by e ca mai sus si adaugam si
+    -- having pt a selecta doar profii care au nr max de note de 2 gasit anterior
+    SELECT COUNT(*)
+    INTO nr_profi
+    FROM (
+        SELECT p.nume, p.prenume
+        FROM profesor p, materie m, nota n
+        WHERE p.id_prof = m.id_prof
+        AND m.id_mat = n.id_mat
+        AND n.nota = 2
+        GROUP BY p.nume, p.prenume
+        HAVING COUNT(*) = nr_max
+    );
+    
+    -- verificam daca sunt mai multi profesori care au acel nr max de 2 date
+    IF nr_profi > 1 THEN
+        RAISE TOO_MANY_ROWS;
+    END IF;
+    
+    -- selectam numele profului care a dat cele mai multe note 2
+    SELECT p.nume || ' ' || p.prenume
+    INTO prof_max
+    FROM profesor p, materie m, nota n
+    WHERE p.id_prof = m.id_prof
+    AND m.id_mat = n.id_mat
+    AND n.nota = 2
+    GROUP BY p.nume, p.prenume
+    HAVING COUNT(*) = nr_max;
+    
+    -- returnam numele profului
+    RETURN prof_max;
+EXCEPTION
+    -- tratam exceptia cand nu exista note de 2
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'NU au fost date note de 2 pana acuma!';
+    -- tratam exceptia cand sunt mai multi profesori care au nr max de note de 2
+    WHEN TOO_MANY_ROWS THEN
+        RETURN 'Mai multi profesori au dat acelasi numar de note de 2';
+    -- tratam si alte erori
+    WHEN OTHERS THEN
+        RETURN 'Alta eroare!';
+END;
+/
+
+-- apelare
+BEGIN
+    -- apelam functia si afisam rezultatul
+    DBMS_OUTPUT.PUT_LINE(obtine_prof_nr_max_2);
+END;
+/
+
+set serveroutput on;
+
+SELECT m.denumire_mat, p.nume || ' ' || p.prenume nume_p, s.nume || ' ' || s.prenume nume_s, n.nota
+FROM materie m, student s, nota n, profesor p
+WHERE m.id_mat = n.id_mat
+AND s.id_student = n.id_student
+AND p.id_prof = m.id_prof;
+
+select * from profesor;
+
+
+-- 9
+CREATE OR REPLACE PROCEDURE afisare_camin_nota_mare(p_id_materie IN NUMBER, p_tip_fin VARCHAR2) IS
+    camin VARCHAR2(100); -- variabila pt denumirea caminului
+    nr_studenti NUMBER; -- variabila pt nr de studenti gasiti
+    
+    -- definim exceptii
+    exceptie_nu_exista_studenti EXCEPTION;
+    exceptie_mai_multi_studenti EXCEPTION;
+BEGIN
+    SELECT COUNT(*)
+    INTO nr_studenti
+    FROM student s
+    JOIN nota n ON s.id_student = n.id_student
+    JOIN materie m ON n.id_mat = m.id_mat
+    JOIN camin c ON s.id_camin = c.id_camin
+    JOIN student_finantare sf ON s.id_student = sf.id_student
+    JOIN finantare f ON sf.id_fin = f.id_fin
+    WHERE m.id_mat = p_id_materie
+    AND UPPER(f.tip_fin) = UPPER(p_tip_fin)
+    AND n.nota = (
+                SELECT MAX(nota) -- selectam nota max
+                FROM nota
+                WHERE id_mat = p_id_materie);
+                
+    IF nr_studenti = 0 THEN
+        RAISE exceptie_nu_exista_studenti;
+    ELSIF nr_studenti > 1 THEN
+        RAISE exceptie_mai_multi_studenti;
+    ELSE
+        SELECT c.denumire_camin
+        INTO camin
+        FROM student s
+        JOIN nota n ON s.id_student = n.id_student
+        JOIN materie m ON n.id_mat = m.id_mat
+        JOIN camin c ON s.id_camin = c.id_camin
+        JOIN student_finantare sf ON s.id_student = sf.id_student
+        JOIN finantare f ON sf.id_fin = f.id_fin
+        WHERE m.id_mat = p_id_materie
+        AND UPPER(f.tip_fin) = UPPER(p_tip_fin)
+        AND n.nota = (
+                    SELECT MAX(nota) -- selectam nota max
+                    FROM nota
+                    WHERE id_mat = p_id_materie);
+    
+        -- afisarea caminului
+        DBMS_OUTPUT.PUT_LINE('Studentul cu cea mai mare nota este cazat la caminul: ' || camin);
+    END IF;
+    
+EXCEPTION
+    -- tratarea exceptiei in care nu e niciun student in camin care a luat nota max
+    WHEN exceptie_nu_exista_studenti THEN
+        DBMS_OUTPUT.PUT_LINE('NU a fost gasit niciun student la buget cazat la camin cu cea mai mare nota la aceasta materie!');
+    -- tratarea exceptiei in care sunt mai multi studenti cu cea mai mare nota
+    WHEN exceptie_mai_multi_studenti THEN
+        DBMS_OUTPUT.PUT_LINE('Exista mai multi studenti la buget cu cea mai mare nota la materia respectiva!');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Alta eroare!');
+END;
+/
+
+BEGIN
+    afisare_camin_nota_mare(2004);
+END;
+/
+
+
+select * from student;
+select * from finantare;
+-------
+-- florescu anrei, id 16, magurele NU
+-- ne legam de id_student = 28, Potcoava Valentin
+-- Structuri algebrice in informatica, id 2004
+-- il bagam la buget
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (28, 3200);
+
+-- ii dam cea mai mare nota la materia respectiva
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 10, 28, 2004);
+
+-- il cazam la Palady
+UPDATE student
+SET id_camin = 3505
+WHERE id_student = 28;
+
+-- id 23, Kim Min il bagam la buget
+-- il bagam la buget
+INSERT INTO Student_Finantare (id_student, id_fin)
+VALUES (23, 3200);
+
+-- ii dam cea mai mare nota la materia respectiva
+INSERT INTO Nota (id_nota, nota, id_student, id_mat)
+VALUES (seq_nota_id.NEXTVAL, 10, 23, 2004);
+
+-- il cazam la Palady
+UPDATE student
+SET id_camin = 3505
+WHERE id_student = 23;
+
+commit;
+
+
+
+--------
+
+select * from camin;
+
+select s.id_student, f.tip_fin
+from student s, student_finantare sf, finantare f
+where s.id_student = sf.id_student
+and f.id_fin = sf.id_fin;
+
+select s.nume, s.prenume, c.denumire_camin
+from student s, camin c
+where c.id_camin = s.id_camin
+order by c.denumire_camin;
+
+-- 10
+CREATE OR REPLACE TRIGGER capacitate_camin
+AFTER INSERT OR UPDATE ON student
+DECLARE
+    maxim NUMBER;
+BEGIN
+    -- verificam daca exista un camin care a depasit capacitatea
+    -- dupa comanda curenta
+    SELECT MAX(nr)
+    INTO maxim
+    FROM (SELECT ID_CAMIN, COUNT(*) AS nr
+          FROM student
+          WHERE id_camin IS NOT NULL
+          GROUP BY id_camin);
+          
+    IF maxim >= 6 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Capacitatea caminului a fost depasita!');
+    END IF;
+END;
+/
+
+SELECT s.nume, s.prenume, c.denumire_camin
+FROM student s, camin c
+WHERE c.id_camin = s.id_camin
+ORDER BY c.denumire_camin;
+
+select * from student;
+select * from camin;
+
+
+-- incercam sa o cazam pe Popovici Elena cu id 6 la Grozavesti id 3500
+UPDATE student
+SET id_camin = 3500
+WHERE id_student = 6;
+
+-- incercam sa o cazam pe Popovici Elena cu id 6 la Magurele id 3503
+UPDATE student
+SET id_camin = 3503
+WHERE id_student = 6;
+
+-- incercam si un insert
+INSERT INTO Student (id_student, nume, prenume, initiala_tata, data_nasterii, tara, judet, localitate, gen, cnp, mediu_provenienta, email, nr_telefon, id_camin)
+VALUES (seq_student_id.NEXTVAL, 'Cota', 'Ana', 'B', TO_DATE('2005-03-18', 'YYYY-MM-DD'), 'Romania', 'Sibiu', 'Sibiu', 'F', '1990897123456', 'Urban', 'cota.ana@email.com', '0734567544', 3500);
+
+-- 11
+CREATE OR REPLACE TRIGGER fara_schimbari_specializare
+BEFORE UPDATE ON student_specializare -- declansare inainte de orice update a tabelei
+FOR EACH ROW -- se aplica pt incercarea inserarii fiecarei linii noi
+BEGIN
+    IF :OLD.id_specializare != :NEW.id_specializare THEN
+        -- daca se incearca modificarea specializarii se ridica exceptia
+        RAISE_APPLICATION_ERROR(-20002, 'Nu este permisa schimbarea apecializarii!');
+    END IF;
+END;
+/
+
+select s.nume, s.prenume, s.id_student, sp.denumire, sp.id_specializare
+from student s, student_specializare ss, specializare sp
+where s.id_student = ss.id_student
+and sp.id_specializare = ss.id_specializare;
+
+-- incercam sa il mutam pe Gheorghe George id 10, de la matematica informatica 3004 la matematica aplicata 3003
+UPDATE student_specializare
+SET id_specializare = 3003
+WHERE id_student = 10;
+
+
+-- 12
+CREATE OR REPLACE TRIGGER afisare_nume_tabel_comanda
+AFTER CREATE OR DROP OR ALTER ON SCHEMA -- declansare dupa comenziile specificate la nivel de schema
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Comanda: ' || SYS.SYSEVENT || ' pe tabela: ' || SYS.DICTIONARY_OBJ_NAME);
+END;
+/
+
+-- testare
+CREATE TABLE tabel_test (
+    id_test NUMBER
+);
+
+DROP TABLE tabel_test;
+
