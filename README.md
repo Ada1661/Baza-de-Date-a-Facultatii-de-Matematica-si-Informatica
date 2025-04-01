@@ -1,9 +1,9 @@
-# Baza de Date a Facultății de Matematică și Informatică
-Acest repository conține materialele aferente proiectului dezvoltat in Oracle SQL Developer.
+# Database for the Faculty of Mathematics and Computer Science
+This repository contains the project materials developed using Oracle SQL Developer.
 
-## Conținut
-- **Cod_BD.txt**: tot codul care a fost utilizat atât pentru alcătuirea bazei de date în sine, cât și rezolvările diverselor probleme PL/SQL;
-- **Descriere_BD_and_more.docx**: descrierea proiectului, diagramele, cerințele PL/SQL.
+## Contents
+- **Cod_BD.txt**: All the code used both for creating the database and for solving various PL/SQL problems.
+- **Descriere_BD_and_more.docx**: The project description, diagrams, and PL/SQL requirements.
 
-## Descriere
-Aceasta este prima baza de date pe care am făcut-o și pe care am lucrat pe parcursul mai multor ani. Reprezintă un proiect pe care l-am utilizat pentru a exersa cunoștințele întreprinse. Proiectul include implementarea de secvențe, declanșatori, proceduri, mai multe tipuri de cursori, fiecare fiind aplicat ăn scenarii practice pentru gestionarea și manipularea datelor.
+## Description
+This is the first database I built and have worked on over several years. It is a project I used to practice and apply my SQL skills. The project includes the implementation of sequences, triggers, procedures, and various types of cursors, each applied in practical scenarios for data management and manipulation.
